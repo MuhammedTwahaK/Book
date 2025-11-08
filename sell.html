@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Book Pre-Order</title>
+<style>
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#0b0e14;color:#fff}
+header{background:#111;padding:15px;text-align:center;position:sticky;top:0;z-index:10}
+header h1{margin:0;font-size:24px;color:#ff6b6b}
+nav{margin-top:8px}
+nav a{color:#aaa;margin:0 10px;text-decoration:none;font-weight:bold}
+nav a:hover{color:#fff}
+main{max-width:1000px;margin:20px auto;padding:10px}
+.book-section{display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:flex-start}
+.cover{flex:1 1 300px;max-width:360px;border-radius:12px;overflow:hidden;box-shadow:0 0 20px rgba(0,0,0,0.5)}
+.cover img{width:100%;display:block}
+.details{flex:1 1 300px;background:#151a25;padding:20px;border-radius:12px}
+.price{font-size:22px;font-weight:bold;margin:8px 0;color:#ff6b6b}
+.old-price{text-decoration:line-through;color:#777;font-size:16px;margin-right:10px}
+.qty-control{display:flex;align-items:center;gap:10px;margin-top:10px}
+.qty-control button{padding:6px 10px;background:#ff6b6b;border:none;color:#fff;font-weight:bold;border-radius:4px;cursor:pointer}
+.qty-control span{min-width:30px;text-align:center}
+button.action{margin-top:10px;width:100%;padding:10px;border:none;border-radius:6px;font-weight:bold;cursor:pointer}
+.add{background:#ff6b6b;color:#fff}
+.cart{background:#151a25;padding:15px;border-radius:10px;margin-top:20px}
+.cart h3{margin-top:0;border-bottom:1px solid #333;padding-bottom:8px}
+.cart-item{display:flex;justify-content:space-between;margin:5px 0}
+.total{text-align:right;font-weight:bold;margin-top:10px}
+form{display:flex;flex-direction:column;gap:10px;margin-top:15px}
+input,textarea{width:100%;padding:8px;border-radius:6px;border:none;background:#222;color:#fff}
+footer{text-align:center;color:#999;padding:20px 0;font-size:14px;margin-top:20px;border-top:1px solid #222}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>From Nakba to Digital Intifada</h1>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#book">Book</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <section class="book-section" id="book">
+    <div class="cover">
+      <img src="./Cover Full.png" alt="Book Cover">
+    </div>
+    <div class="details">
+      <h2>From Nakba to Digital Intifada</h2>
+      <p>by <strong>Muhammed Twaha K</strong></p>
+      <div>
+        <span class="old-price">₹1050</span>
+        <span class="price">₹400 (Offer Price)</span>
+      </div>
+
+      <div class="qty-control">
+        <button id="dec">−</button>
+        <span id="qty">1</span>
+        <button id="inc">+</button>
+      </div>
+
+      <button class="action add" id="addCart">Add to Cart</button>
+
+      <div class="cart" id="cart">
+        <h3>Cart</h3>
+        <div id="cartItems">Cart is empty</div>
+        <div class="total" id="cartTotal"></div>
+      </div>
+
+      <!-- Put the form here: checkout button inside, type="button" -->
+      <form id="buyerForm" onsubmit="return false;">
+        <input type="text" id="name" placeholder="Full Name" required>
+        <input type="text" id="phone" placeholder="Phone / WhatsApp" required>
+        <textarea id="address" rows="3" placeholder="Full Address" required></textarea>
+        <button type="button" class="action checkout" id="checkout">Buy</button>
+      </form>
+    </div>
+  </section>
+
+  <section id="about">
+    <h2>About</h2>
+    <p>This book explores the journey from historical displacement to digital resistance, connecting the Palestinian narrative to modern online activism. A must-read for those who wish to understand digital movements rooted in justice and identity.</p>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>Email: <a href="mailto:muhammedtwaha7090@gmail.com" style="color:#ff6b6b">muhammedtwaha7090@gmail.com</a><br>
+    WhatsApp: <a href="https://wa.me/919544234425" style="color:#ff6b6b">+91 9544234425</a></p>
+  </section>
+</main>
+
+<footer>
+  © 2025 From Nakba to Digital Intifada. All rights reserved.
+</footer>
+
+<script>
+let qty = 1;
+let cart = [];
+const qtyEl = document.getElementById('qty');
+
+document.getElementById('inc').onclick = () => { qty++; qtyEl.innerText = qty; }
+document.getElementById('dec').onclick = () => { if (qty > 1) qty--; qtyEl.innerText = qty; }
+
+document.getElementById('addCart').onclick = () => {
+  cart = [{ title: 'From Nakba to Digital Intifada', price: 400, qty: qty }];
+  renderCart();
+}
+
+function renderCart() {
+  const c = document.getElementById('cartItems');
+  const t = document.getElementById('cartTotal');
+  if (cart.length === 0) { c.innerHTML = 'Cart is empty'; t.innerHTML = ''; return; }
+  const item = cart[0];
+  c.innerHTML = `<div class='cart-item'><div>${item.title} x ${item.qty}</div><div>₹${item.price * item.qty}</div></div>`;
+  t.innerHTML = `Total: ₹${item.price * item.qty}`;
+}
+
+document.getElementById('checkout').onclick = function () {
+  if (cart.length === 0) { 
+    alert('Add item to cart first'); 
+    return; 
+  }
+
+  // Always get fresh values from fields each time button is pressed
+  var name = document.getElementById('name').value.trim();
+  var phone = document.getElementById('phone').value.trim();
+  var address = document.getElementById('address').value.trim();
+
+  if (!name || !phone || !address) {
+    alert('Please fill your details');
+    return;
+  }
+
+  var total = cart[0].price * cart[0].qty;
+
+  // Invoice as WhatsApp message
+  var message = 
+`📦 *Book Order Invoice*
+
+*Book:* ${cart[0].title}
+*Quantity:* ${cart[0].qty}
+*Unit Price:* ₹${cart[0].price}
+*Total Amount:* ₹${total}
+
+---------------------------
+👤 *Buyer Details*
+*Name:* ${name}
+*Phone:* ${phone}
+*Address:* ${address}
+---------------------------
+
+Thank you for pre-ordering *From Nakba to Digital Intifada*. 
+Our team will contact you soon regarding shipping and payment. 📚✨`;
+
+  var encodedMsg = encodeURIComponent(message);
+  var waNumber = '919544234425';
+
+  // Open WhatsApp with all fields copied
+  window.open(`https://wa.me/${waNumber}?text=${encodedMsg}`, '_blank');
+};
+</script>
+
+</body>
+</html>
